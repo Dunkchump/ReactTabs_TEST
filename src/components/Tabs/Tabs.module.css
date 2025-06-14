@@ -11,6 +11,12 @@
   overflow: hidden;
 }
 
+.tabsContainer::-webkit-scrollbar {
+  /* display: none; */
+}
+
+/* ...existing code... */
+
 .tabsList {
   display: flex;
   align-items: center;
@@ -21,23 +27,32 @@
   overflow-y: hidden;
   padding: 0;
   height: 48px;
+  /* Додаємо чіткіший скроллбар */
   scrollbar-width: thin;
-  scrollbar-color: #bfc7d1 #f8f9fa;
+  scrollbar-color: #b3b3b3 #e0e0e0;
 }
 
 .tabsList::-webkit-scrollbar {
-  height: 8px;
-  background: #f8f9fa;
-  border-radius: 4px;
+  height: 10px !important;
+  background: #e0e0e0 !important;
+  border-radius: 6px !important;
 }
 
 .tabsList::-webkit-scrollbar-thumb {
-  background: #bfc7d1;
-  border-radius: 4px;
+  background: #b3b3b3 !important;
+  border-radius: 6px !important;
+  min-width: 60px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e0e0e0;
 }
 
 .tabsList::-webkit-scrollbar-thumb:hover {
-  background: #a0a7b3;
+  background: #888 !important;
+}
+
+.tabsList::-webkit-scrollbar-track {
+  background: #e0e0e0 !important;
+  border-radius: 6px !important;
 }
 
 /* Стилі для окремого табу */
@@ -50,27 +65,42 @@
   max-width: 200px;
   height: 36px;
   margin-right: 2px;
-  background: #f8f9fa;
-  border: 1px solid #e1e5e9;
-  border-bottom: none;
-  border-radius: 8px 8px 0 0;
+  background: #fff;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
   user-select: none;
   transition: all 0.2s ease;
   overflow: hidden;
 }
 
+.tabItem:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 16px;
+  background: #aeb6ce;
+}
+
+.tabItem:last-child {
+  border-right: none;
+}
+
 .tabItem:hover {
-  background: #e9ecef;
+  background: #f4f7f9;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .tabItem.active {
-  background: #ffffff;
-  border-color: #007bff;
+  background: #f1f5f8;
+  border-color: #e1e5e9;
   box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
   z-index: 1;
+  border-top: 3px solid #4690e2;
 }
 
 .tabItem.active::after {
@@ -80,16 +110,35 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: #007bff;
+  background: #4690e2;
+}
+
+.tabItem.active:not(:last-child)::after {
+  display: none;
+}
+
+.tabItem.active ~ .tabItem::after {
+  display: none;
+}
+
+.tabItem:not(:last-child).active::after {
+  display: none;
+}
+
+.tabItem:not(:last-child):has(+ .active)::after {
+  display: none;
 }
 
 .tabItem.pinned {
-  border-color: #28a745;
+  border-top: 3px solid #7f858d;
+  border-color: #e1e5e9;
   background: #f8fff9;
   min-width: 36px;
   max-width: 36px;
   justify-content: center;
   position: relative;
+  border-radius: 0;
+  color: #7f858d;
 }
 
 .tabItem.pinned .tabTitle {
@@ -116,7 +165,7 @@
 
 .tabItem.pinned.active {
   background: #ffffff;
-  border-color: #28a745;
+  border-top: 3px solid #7f858d;
 }
 
 .tabItem.pinned.active::after {
@@ -124,6 +173,7 @@
 }
 
 .tabItem.dragged {
+  background: #7f858d;
   opacity: 0.5;
   transform: rotate(5deg);
   z-index: 1000;
@@ -145,11 +195,18 @@
 }
 
 .tabIcon {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  vertical-align: middle;
   flex-shrink: 0;
 }
 
 .tabTitle {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
   flex: 1;
   font-size: 13px;
   font-weight: 500;
@@ -158,15 +215,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
+  font-family: "Poppins", Arial, sans-serif;
 }
 
 .tabItem.active .tabTitle {
-  color: #007bff;
+  color: #000000;
   font-weight: 600;
 }
 
 .tabItem.pinned .tabTitle {
-  color: #28a745;
+  color: #7f858d;
 }
 
 /* Кнопки в табі */
@@ -199,6 +257,12 @@
   line-height: 1;
 }
 
+.closeButton:hover {
+  background: #dc3545;
+  color: #fff;
+  border-radius: 50%;
+}
+
 .pinButton {
   font-size: 10px;
 }
@@ -222,45 +286,41 @@
 }
 
 .dropdownButton {
+  width: 48px;
+  height: 48px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  background: #f8f9fa;
-  border: 1px solid #e1e5e9;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
   position: relative;
+  transition: background 0.2s;
+  box-shadow: none;
+}
+
+.dropdownButton.open {
+  background: #4690e2;
 }
 
 .dropdownButton:hover {
-  background: #e9ecef;
-  border-color: #adb5bd;
+  background: #e6eef8;
+}
+
+.dropdownButton.open:hover {
+  background: #3576c9;
 }
 
 .dropdownIcon {
-  font-size: 16px;
-  color: #6c757d;
+  font-size: 28px;
   font-weight: bold;
-}
-
-.dropdownCount {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #dc3545;
-  color: white;
-  font-size: 10px;
-  font-weight: bold;
-  min-width: 16px;
-  height: 16px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 4px;
+}
+
+.dropdownCount {
+  display: none;
 }
 
 .dropdownMenu {
@@ -276,8 +336,26 @@
   max-width: 300px;
   max-height: 400px;
   overflow-y: auto;
+  overflow-x: auto;
   z-index: 1001;
   animation: dropdownFadeIn 0.2s ease;
+}
+
+.dropdownMenu::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+  background: #f5f5f5;
+  border-radius: 2px;
+}
+
+.dropdownMenu::-webkit-scrollbar-thumb {
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  height: 4px;
+  background: #b3b3b3;
+  border-radius: 2px;
+  background-clip: padding-box;
 }
 
 @keyframes dropdownFadeIn {
@@ -490,28 +568,8 @@
 }
 
 /* Додаткові стилі для покращення UX */
-.tabsContainer::-webkit-scrollbar {
-  display: none;
-}
-
 .tabsContainer {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-/* Стилі для мобільних пристроїв */
-@media (hover: none) and (pointer: coarse) {
-  .tabItem:hover {
-    transform: none;
-  }
-
-  .dropdownItemActions {
-    opacity: 1;
-  }
-
-  .closeButton,
-  .pinButton {
-    width: 20px;
-    height: 20px;
-  }
+  /* Прибираємо приховування скроллбару */
+  /* scrollbar-width: none; */
+  /* -ms-overflow-style: none; */
 }

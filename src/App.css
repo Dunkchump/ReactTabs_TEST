@@ -19,3 +19,24 @@
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Custom horizontal scrollbar for tab containers */
+.tabs-container {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #b3b3b3 #f5f5f5; /* Firefox */
+}
+
+.tabs-container::-webkit-scrollbar {
+  height: 6px;
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+  background: #b3b3b3;
+  border-radius: 3px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}

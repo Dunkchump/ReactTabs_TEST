@@ -1,6 +1,44 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import {
+  MdHome,
+  MdInfo,
+  MdContactPhone,
+  MdBuild,
+  MdArticle,
+  MdSettings,
+  MdHelp,
+  MdFeedback,
+  MdPerson,
+  MdNotifications,
+  MdStar,
+  MdArchive,
+  MdDelete,
+  MdHistory,
+  MdBookmark,
+  MdDownload,
+} from "react-icons/md";
 import styles from "./Tabs.module.css";
+
+const iconMap = {
+  MdHome,
+  MdInfo,
+  MdContactPhone,
+  MdBuild,
+  MdArticle,
+  MdSettings,
+  MdHelp,
+  MdFeedback,
+  MdPerson,
+  MdNotifications,
+  MdStar,
+  MdArchive,
+  MdDelete,
+  MdHistory,
+  MdBookmark,
+  MdDownload,
+};
 
 const TabsDropdown = ({
   tabs,
@@ -80,13 +118,25 @@ const TabsDropdown = ({
   return (
     <div className={styles.tabsDropdown}>
       <button
-        className={styles.dropdownButton}
+        className={
+          isOpen
+            ? `${styles.dropdownButton} ${styles.open}`
+            : styles.dropdownButton
+        }
         onClick={handleToggleDropdown}
-        title={`Показати ${tabs.length} прихованих табів`}
+        title={isOpen ? "Hide hidden tabs" : `Show ${tabs.length} hidden tabs`}
         ref={buttonRef}
       >
-        <span className={styles.dropdownIcon}>⋯</span>
-        <span className={styles.dropdownCount}>{tabs.length}</span>
+        <span className={styles.dropdownIcon}>
+          <MdKeyboardArrowDown
+            style={{
+              color: isOpen ? "#fff" : "#7F858D",
+              fontSize: 28,
+              transform: isOpen ? "rotate(180deg)" : "none",
+              transition: "transform 0.2s",
+            }}
+          />
+        </span>
       </button>
 
       {isOpen &&
@@ -103,7 +153,7 @@ const TabsDropdown = ({
             }}
           >
             <div className={styles.dropdownHeader}>
-              Приховані таби ({tabs.length})
+              Hidden tabs ({tabs.length})
             </div>
             {tabs.map((tab) => (
               <div
@@ -117,27 +167,31 @@ const TabsDropdown = ({
                 onDragEnd={onDragEnd}
                 onDragOver={(e) => onDragOver(e, tab)}
                 onDragEnter={(e) => onDragEnter(e, tab)}
-                onDragLeave={onDragLeave}
+                onDragLeave={(e) => onDragLeave(e, tab)}
                 onDrop={(e) => onDrop(e, tab)}
                 title={tab.title}
               >
                 <div className={styles.dropdownItemContent}>
-                  {tab.icon && (
-                    <span className={styles.dropdownItemIcon}>{tab.icon}</span>
+                  {tab.icon && iconMap[tab.icon] && (
+                    <span className={styles.dropdownItemIcon}>
+                      {React.createElement(iconMap[tab.icon], {
+                        style: { color: "#7F858D", fontSize: 18 },
+                      })}
+                    </span>
                   )}
                   <span className={styles.dropdownItemTitle}>{tab.title}</span>
                   <div className={styles.dropdownItemActions}>
                     <button
                       className={styles.dropdownPinButton}
                       onClick={(e) => handleTogglePin(e, tab.id)}
-                      title={tab.isPinned ? "Відкріпити таб" : "Закріпити таб"}
+                      title={tab.isPinned ? "Unpin tab" : "Pin tab"}
                     >
                       {tab.isPinned ? "📍" : "📌"}
                     </button>
                     <button
                       className={styles.dropdownCloseButton}
                       onClick={(e) => handleCloseTab(e, tab.id)}
-                      title="Закрити таб"
+                      title="Close tab"
                     >
                       ×
                     </button>
