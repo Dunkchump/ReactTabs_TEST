@@ -6,16 +6,38 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
 .tabsList {
   display: flex;
   align-items: center;
-  max-width: 100%;
   width: 100%;
-  overflow: hidden;
-  padding: 0 16px;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
   height: 48px;
+  scrollbar-width: thin;
+  scrollbar-color: #bfc7d1 #f8f9fa;
+}
+
+.tabsList::-webkit-scrollbar {
+  height: 8px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.tabsList::-webkit-scrollbar-thumb {
+  background: #bfc7d1;
+  border-radius: 4px;
+}
+
+.tabsList::-webkit-scrollbar-thumb:hover {
+  background: #a0a7b3;
 }
 
 /* Стилі для окремого табу */
@@ -23,9 +45,9 @@
   position: relative;
   display: flex;
   align-items: center;
-  flex: 1 1 0;
-  min-width: 60px;
-  max-width: none;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
   height: 36px;
   margin-right: 2px;
   background: #f8f9fa;
